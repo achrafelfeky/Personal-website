@@ -10,8 +10,6 @@ import os
 
 
 load_dotenv()
-print("✅ Loaded secret key:", os.getenv("FLASK_SECRET_KEY"))
-print("✅ Loaded admin:", os.getenv("ADMIN_USERNAME"))
 app = Flask(__name__)
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -148,7 +146,7 @@ def delete_project(project_id):
     project = Project.query.get_or_404(project_id)
     db.session.delete(project)
     db.session.commit()
-    flash("تم حذف المشروع ❌", "warning")
+    flash("تم حذف المشروع ", "warning")
     return redirect(url_for('admin.dashboard'))
 
 
@@ -168,6 +166,7 @@ app.register_blueprint(project_bp)
 with app.app_context():
     db.create_all()
 
-# ===== تشغيل السيرفر =====
+
+# Run
 if __name__ == '__main__':
     app.run(debug=True)
