@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="project-detail-container">
+    <div class="project-detail-card">
+        {% if project.image_url %}
+            <div class="project-image">
+                <img src="{{ project.image_url }}" alt="{{ project.title }}">
+            </div>
+        {% endif %}
+        <div class="project-content">
+            <h2 class="project-title">{{ project.title }}</h2>
+            <div class="project-tech">
+                <strong>التقنيات:</strong> {{ project.tech_stack }}
+            </div>
+            <div class="project-description">
+                {{ project.description }}
+            </div>
+            <div class="project-actions">
+                {% if project.live_link %}
+                    <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>زيارة المشروع</span>
+                    </a>
+                {% endif %}
+                {% if project.githup %}
+                    <a href="{{ project.githup }}" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                {% endif %}
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>رجوع</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

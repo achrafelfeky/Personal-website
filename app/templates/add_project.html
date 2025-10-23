@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'تعديل مشروع' if project else 'إضافة مشروع' }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>{{ 'تعديل مشروع' if project else 'إضافة مشروع' }}</h2>
+        </div>
+        <div class="form-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label>العنوان</label>
+                    <input type="text" name="title" value="{{ project.title if project else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label>التقنيات</label>
+                    <input type="text" name="tech_stack" value="{{ project.tech_stack if project else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label>الوصف</label>
+                    <textarea name="description" rows="4">{{ project.description if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>رابط GitHub</label>
+                    <input type="text" name="githup" value="{{ project.githup if project else '' }}">
+                </div>
+                <div class="form-group">
+                    <label>رابط المشروع المباشر</label>
+                    <input type="text" name="live_link" value="{{ project.live_link if project else '' }}">
+                </div>
+                <div class="form-group">
+                    <label>رابط الصورة</label>
+                    <input type="text" name="image_url" value="{{ project.image_url if project else '' }}">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {{ 'تعديل' if project else 'إضافة' }}
+                    </button>
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        رجوع
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

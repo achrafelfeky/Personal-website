@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Byte-compiled / optimized
+*.pyc
+*.pyo
+*.pyd
+
+# Flask / app
+instance/
+*.sqlite3
+*.db
+
+# Secrets / env files
+.env
+
+# IDEs / editors
+.vscode/
+.idea/
+*.swp
+
+# System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node (if any)
+node_modules/
+npm-debug.log
+
+# others
+coverage/
+dist/
+build/
+*.egg-info/

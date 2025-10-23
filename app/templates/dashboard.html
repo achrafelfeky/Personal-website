@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>لوحة التحكم</h2>
+        <p class="stats">إجمالي المشاريع: <strong>{{ total_project }}</strong></p>
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('projects.add_project') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            إضافة مشروع جديد
+        </a>
+    </div>
+
+    <div class="dashboard-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>العنوان</th>
+                    <th>التقنيات</th>
+                    <th>الروابط</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.tech_stack }}</td>
+                    <td class="links">
+                        {% if project.live_link %}<a href="{{ project.live_link }}" target="_blank">Live</a>{% endif %}
+                        {% if project.githup %} | <a href="{{ project.githup }}" target="_blank">GitHub</a>{% endif %}
+                    </td>
+                    <td class="actions">
+                        <a href="{{ url_for('projects.edit_project', project_id=project.id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i>
+                            تعديل
+                        </a>
+                        <form action="{{ url_for('projects.delete_project', project_id=project.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد؟')">
+                                <i class="fas fa-trash"></i>
+                                حذف
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

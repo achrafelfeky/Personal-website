@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>achraf - Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <!-- Interactive Background Canvas -->
+    <canvas id="backgroundCanvas"></canvas>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">achraf elfeky.</div>
+                <nav class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#projects" class="nav-link">Projects</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Profile Picture with Decorative Elements -->
+                <div class="profile-container">
+                    <div class="decorative-icon top-left">
+                        <i class="fas fa-hexagon"></i>
+                    </div>
+                    <div class="decorative-icon top-right">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="profile-image">
+                        <img src="{{ url_for('static', filename='images/profilee.jpg') }}" alt="achraf elfeky">
+                    </div>
+                    <div class="decorative-icon bottom">
+                        <i class="fas fa-code"></i>
+                    </div>
+                </div>
+
+                <!-- Availability Status -->
+                <div class="availability-badge">
+                    <span class="status-dot available"></span>
+                    <span>Open to offers</span>
+                    
+                </div>
+
+                <!-- Introduction -->
+                <div class="introduction">
+                    <p class="greeting">Hi, I'm</p>
+                    <h1 class="name">achraf elfeky</h1>
+                    <p class="title">Back-End Developer</p>
+                    <p class="description">
+                        "What the user doesn't see...is exactly what makes everything work!"
+                        
+                    </p>
+                </div>
+
+                <!-- Call to Action Buttons -->
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary" id="viewWorkBtn">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary" id="contactBtn">Contact Me</a>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="tech-stack">
+                    <h3>Technical Skills</h3>
+                    <div class="tech-skills">
+                        <div class="skill-item">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-flask"></i>
+                            <span>Flask</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-database"></i>
+                            <span>MySQL</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-database"></i>
+                            <span>SQLite</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-cube"></i>
+                            <span>OOP</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-layer-group"></i>
+                            <span>ORM</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Postman</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-git-alt"></i>
+                            <span>Git</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-html5"></i>
+                            <span>HTML/CSS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                {% for project in projects %}
+                <div class="project-card">
+                    {% if project.image_url %}
+                    <div class="project-image">
+                        <img src="{{ project.image_url }}" alt="{{ project.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>{{ project.title }}</h3>
+                        </div>
+                        <div class="project-description">
+                            <p>{{ project.description }}</p>
+                        </div>
+                        <div class="project-actions">
+                            <a href="{{ project.githup }}" target="_blank" class="project-btn primary">
+                                <i class="fab fa-github"></i>
+                                <span>View Code</span>
+                            </a>
+                            <a href="{{ url_for('projects.get_project', project_id=project.id) }}" class="project-btn secondary">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>View Project</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>
+                Hi, I'm achraf elfeky, a passionate back-end developer with experience in building 
+                web applications using Python and modern frameworks. I love solving complex problems 
+                and building scalable solutions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <div class="contact-links">
+                <a href="https://github.com/achrafelfeky" target="_blank" class="contact-link">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://www.linkedin.com/in/ashraf-elfeky-5b4399349/" target="_blank" class="contact-link">
+                    <i class="fab fa-linkedin"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="mailto:achrafelfeky@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 achraf elfeky. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive Background Animation
+        class InteractiveBackground {
+            constructor() {
+                this.canvas = document.getElementById('backgroundCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.dots = [];
+                this.mouse = { x: 0, y: 0 };
+                this.maxDistance = 120;
+                this.dotCount = 80;
+                this.mouseRadius = 100;
+                
+                this.init();
+                this.bindEvents();
+                this.animate();
+            }
+            
+            init() {
+                this.resize();
+                this.createDots();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createDots() {
+                this.dots = [];
+                for (let i = 0; i < this.dotCount; i++) {
+                    this.dots.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.25,
+                        vy: (Math.random() - 0.5) * 0.25,
+                        radius: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.6 + 0.2,
+                        pulse: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+            
+            bindEvents() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createDots();
+                });
+                
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                this.canvas.addEventListener('mouseleave', () => {
+                    this.mouse.x = -1000;
+                    this.mouse.y = -1000;
+                });
+            }
+            
+            updateDots() {
+                this.dots.forEach(dot => {
+                    // Update pulse animation
+                    dot.pulse += 0.02;
+                    
+                    // Update position
+                    dot.x += dot.vx;
+                    dot.y += dot.vy;
+                    
+                    // Bounce off edges with padding
+                    const padding = 20;
+                    if (dot.x < padding || dot.x > this.canvas.width - padding) {
+                        dot.vx *= -1;
+                        dot.x = Math.max(padding, Math.min(this.canvas.width - padding, dot.x));
+                    }
+                    if (dot.y < padding || dot.y > this.canvas.height - padding) {
+                        dot.vy *= -1;
+                        dot.y = Math.max(padding, Math.min(this.canvas.height - padding, dot.y));
+                    }
+                    
+                    // Mouse interaction with repulsion
+                    const dx = this.mouse.x - dot.x;
+                    const dy = this.mouse.y - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < this.mouseRadius && distance > 0) {
+                        const force = (this.mouseRadius - distance) / this.mouseRadius;
+                        const repelForce = 0.025;
+                        dot.vx -= (dx / distance) * force * repelForce;
+                        dot.vy -= (dy / distance) * force * repelForce;
+                    }
+                    
+                    // Limit velocity
+                    dot.vx = Math.max(-0.6, Math.min(0.6, dot.vx));
+                    dot.vy = Math.max(-0.6, Math.min(0.6, dot.vy));
+                    
+                    // Add some natural movement
+                    dot.vx += (Math.random() - 0.5) * 0.0005;
+                    dot.vy += (Math.random() - 0.5) * 0.0005;
+                });
+            }
+            
+            drawDots() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw connections with gradient effect
+                for (let i = 0; i < this.dots.length; i++) {
+                    for (let j = i + 1; j < this.dots.length; j++) {
+                        const dx = this.dots[i].x - this.dots[j].x;
+                        const dy = this.dots[i].y - this.dots[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < this.maxDistance) {
+                            const opacity = (this.maxDistance - distance) / this.maxDistance;
+                            const lineWidth = opacity * 2;
+                            
+                            // Create gradient for line
+                            const gradient = this.ctx.createLinearGradient(
+                                this.dots[i].x, this.dots[i].y, 
+                                this.dots[j].x, this.dots[j].y
+                            );
+                            gradient.addColorStop(0, `rgba(147, 51, 234, ${opacity * 0.4})`);
+                            gradient.addColorStop(0.5, `rgba(147, 51, 234, ${opacity * 0.2})`);
+                            gradient.addColorStop(1, `rgba(147, 51, 234, ${opacity * 0.4})`);
+                            
+                            this.ctx.strokeStyle = gradient;
+                            this.ctx.lineWidth = lineWidth;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(this.dots[i].x, this.dots[i].y);
+                            this.ctx.lineTo(this.dots[j].x, this.dots[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Draw dots with pulse effect
+                this.dots.forEach(dot => {
+                    const pulseSize = Math.sin(dot.pulse) * 0.3 + 1;
+                    const currentRadius = dot.radius * pulseSize;
+                    
+                    // Create radial gradient for dots
+                    const gradient = this.ctx.createRadialGradient(
+                        dot.x, dot.y, 0,
+                        dot.x, dot.y, currentRadius
+                    );
+                    gradient.addColorStop(0, `rgba(147, 51, 234, ${dot.opacity * 1.5})`);
+                    gradient.addColorStop(0.7, `rgba(147, 51, 234, ${dot.opacity * 0.8})`);
+                    gradient.addColorStop(1, `rgba(147, 51, 234, 0)`);
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(dot.x, dot.y, currentRadius, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+            }
+            
+            animate() {
+                this.updateDots();
+                this.drawDots();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Smooth scrolling and navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize interactive background
+            new InteractiveBackground();
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            // Smooth scrolling for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        // Remove active class from all links
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        // Add active class to clicked link
+                        this.classList.add('active');
+                        
+                        // Calculate offset for header height
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                        
+                        // Smooth scroll to target section
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        navMenu.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+            
+            // CTA buttons smooth scrolling
+            const viewWorkBtn = document.getElementById('viewWorkBtn');
+            const contactBtn = document.getElementById('contactBtn');
+            
+            viewWorkBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const projectsSection = document.querySelector('#projects');
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                const targetPosition = projectsSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                document.querySelector('.nav-link[href="#projects"]').classList.add('active');
+            });
+            
+            contactBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const contactSection = document.querySelector('#contact');
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                const targetPosition = contactSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                document.querySelector('.nav-link[href="#contact"]').classList.add('active');
+            });
+            
+            // Update active link on scroll
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('section[id]');
+                const scrollPos = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        if (navLink) navLink.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

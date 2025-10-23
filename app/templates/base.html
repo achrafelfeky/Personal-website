@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}achraf - Portfolio{% endblock %}</title>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- ملف الـCSS المنفصل -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+    <!-- Interactive Background Canvas -->
+    <canvas id="backgroundCanvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">achraf elfeky.</div>
+                <nav class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                        {% if current_user.is_authenticated and current_user.role == 'admin' and request.endpoint.startswith('admin.') %}
+                            <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link">Admin</a></li>
+                            <li><a href="{{ url_for('admin.logout') }}" class="nav-link">Logout</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 achraf elfeky. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive Background Animation
+        class InteractiveBackground {
+            constructor() {
+                this.canvas = document.getElementById('backgroundCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.dots = [];
+                this.mouse = { x: 0, y: 0 };
+                this.maxDistance = 120;
+                this.dotCount = 80;
+                this.mouseRadius = 100;
+                
+                this.init();
+                this.bindEvents();
+                this.animate();
+            }
+            
+            init() {
+                this.resize();
+                this.createDots();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createDots() {
+                this.dots = [];
+                for (let i = 0; i < this.dotCount; i++) {
+                    this.dots.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.25,
+                        vy: (Math.random() - 0.5) * 0.25,
+                        radius: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.6 + 0.2,
+                        pulse: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+            
+            bindEvents() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createDots();
+                });
+                
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                this.canvas.addEventListener('mouseleave', () => {
+                    this.mouse.x = -1000;
+                    this.mouse.y = -1000;
+                });
+            }
+            
+            updateDots() {
+                this.dots.forEach(dot => {
+                    // Update pulse animation
+                    dot.pulse += 0.02;
+                    
+                    // Update position
+                    dot.x += dot.vx;
+                    dot.y += dot.vy;
+                    
+                    // Bounce off edges with padding
+                    const padding = 20;
+                    if (dot.x < padding || dot.x > this.canvas.width - padding) {
+                        dot.vx *= -1;
+                        dot.x = Math.max(padding, Math.min(this.canvas.width - padding, dot.x));
+                    }
+                    if (dot.y < padding || dot.y > this.canvas.height - padding) {
+                        dot.vy *= -1;
+                        dot.y = Math.max(padding, Math.min(this.canvas.height - padding, dot.y));
+                    }
+                    
+                    // Mouse interaction with repulsion
+                    const dx = this.mouse.x - dot.x;
+                    const dy = this.mouse.y - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < this.mouseRadius && distance > 0) {
+                        const force = (this.mouseRadius - distance) / this.mouseRadius;
+                        const repelForce = 0.025;
+                        dot.vx -= (dx / distance) * force * repelForce;
+                        dot.vy -= (dy / distance) * force * repelForce;
+                    }
+                    
+                    // Limit velocity
+                    dot.vx = Math.max(-0.6, Math.min(0.6, dot.vx));
+                    dot.vy = Math.max(-0.6, Math.min(0.6, dot.vy));
+                    
+                    // Add some natural movement
+                    dot.vx += (Math.random() - 0.5) * 0.0005;
+                    dot.vy += (Math.random() - 0.5) * 0.0005;
+                });
+            }
+            
+            drawDots() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw connections with gradient effect
+                for (let i = 0; i < this.dots.length; i++) {
+                    for (let j = i + 1; j < this.dots.length; j++) {
+                        const dx = this.dots[i].x - this.dots[j].x;
+                        const dy = this.dots[i].y - this.dots[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < this.maxDistance) {
+                            const opacity = (this.maxDistance - distance) / this.maxDistance;
+                            const lineWidth = opacity * 2;
+                            
+                            // Create gradient for line
+                            const gradient = this.ctx.createLinearGradient(
+                                this.dots[i].x, this.dots[i].y, 
+                                this.dots[j].x, this.dots[j].y
+                            );
+                            gradient.addColorStop(0, `rgba(147, 51, 234, ${opacity * 0.4})`);
+                            gradient.addColorStop(0.5, `rgba(147, 51, 234, ${opacity * 0.2})`);
+                            gradient.addColorStop(1, `rgba(147, 51, 234, ${opacity * 0.4})`);
+                            
+                            this.ctx.strokeStyle = gradient;
+                            this.ctx.lineWidth = lineWidth;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(this.dots[i].x, this.dots[i].y);
+                            this.ctx.lineTo(this.dots[j].x, this.dots[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Draw dots with pulse effect
+                this.dots.forEach(dot => {
+                    const pulseSize = Math.sin(dot.pulse) * 0.3 + 1;
+                    const currentRadius = dot.radius * pulseSize;
+                    
+                    // Create radial gradient for dots
+                    const gradient = this.ctx.createRadialGradient(
+                        dot.x, dot.y, 0,
+                        dot.x, dot.y, currentRadius
+                    );
+                    gradient.addColorStop(0, `rgba(147, 51, 234, ${dot.opacity * 1.5})`);
+                    gradient.addColorStop(0.7, `rgba(147, 51, 234, ${dot.opacity * 0.8})`);
+                    gradient.addColorStop(1, `rgba(147, 51, 234, 0)`);
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(dot.x, dot.y, currentRadius, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+            }
+            
+            animate() {
+                this.updateDots();
+                this.drawDots();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize interactive background
+            new InteractiveBackground();
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
