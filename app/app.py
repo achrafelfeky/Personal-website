@@ -80,6 +80,9 @@ def login():
     return render_template('login.html')
 
 
+
+
+
 @admin_bp.route('/logout')
 @login_required
 def logout():
@@ -156,6 +159,7 @@ def get_project(project_id):
     return render_template('project.html', project=project)
 
 @app.route('/')
+@cache.cached(timeout=600)
 def home():
     projects = Project.query.all()  
     return render_template('home.html', projects=projects)
