@@ -43,3 +43,5 @@ coverage/
 dist/
 build/
 *.egg-info/
+
+static/images/
