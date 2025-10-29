@@ -7,10 +7,11 @@ from functools import wraps
 from flask_caching import Cache
 from dotenv import load_dotenv
 import os
-
+from whitenoise import WhiteNoise
 
 load_dotenv()
 app = Flask(__name__)
+app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/', prefix='static/')
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'
